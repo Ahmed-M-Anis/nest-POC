@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
     }
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: 'ahmed anis',
+        secret: process.env.TOKEN_SECRETE,
       });
       request['user'] = payload;
       const user = await this.usersRepository.findOne({
@@ -35,7 +35,6 @@ export class AuthGuard implements CanActivate {
           id: payload.id,
         },
       });
-      console.log(user);
 
       if (!user) {
         throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
