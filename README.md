@@ -24,7 +24,7 @@
 
 ## Description
 
-in this repo i do POS with nestJa and typeORM for postgres
+in this repo i do POS with nestJa and typeORM for postgres and do uthantication and authorization
 
 ## Installation
 
@@ -43,19 +43,6 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
 ## Support
