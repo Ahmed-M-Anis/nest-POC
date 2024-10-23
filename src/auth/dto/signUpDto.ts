@@ -23,6 +23,4 @@ export class SignUpDto {
     message: 'Passwords do not match the passwordConfirm',
   })
   readonly passwordConfirm: string;
-
-  //roleName: string;
 }

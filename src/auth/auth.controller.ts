@@ -14,6 +14,7 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { AuthGuard } from './guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/role.guard';
 import { Role } from 'src/auth/decorator/role.decorator';
+import { loginDTO } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -45,11 +46,12 @@ export class AuthController {
     return this.authService.remove(+id);
   }
 
-  @Post('logIn')
-  logIn(@Body() body: any) {
-    return this.authService.logIn(body.email, body.password);
+  @Post('login')
+  logIn(@Body() loginDTO: loginDTO) {
+    console.log(loginDTO);
+    return this.authService.logIn(loginDTO);
   }
-  @Post('signUp')
+  @Post('signup')
   signUp(@Body() SignUpDto: SignUpDto) {
     return this.authService.signUp(SignUpDto);
   }

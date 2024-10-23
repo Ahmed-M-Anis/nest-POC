@@ -11,6 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from './entities/user.entity';
 import { SignUpDto } from './dto/signUpDto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { loginDTO } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -61,11 +62,8 @@ export class AuthService {
     return existingUser ? true : false;
   }
 
-  async logIn(
-    email: string,
-    password: string,
-  ): Promise<{ access_token: string }> {
-    const user = await this.validateUserPassword(email, password);
+  async logIn(login: loginDTO): Promise<{ access_token: string }> {
+    const user = await this.validateUserPassword(login.email, login.password);
     if (!user) throw new UnauthorizedException('Wrong email or password');
     if (!user.isActive)
       throw new HttpException('User is blocked', HttpStatus.FORBIDDEN);
