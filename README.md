@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+in this repo i do POS with nestJa and typeORM for postgres
 
 ## Installation
 
