@@ -24,7 +24,13 @@
 
 ## Description
 
-in this repo i do POS with nestJa and typeORM for postgres and do uthantication and authorization
+in this repo i do POS with nestJa and typeORM for postgres
+
+## what i did
+
+- authentication & authorization using guards
+- create custom decorator
+- using DTO and apply ValidationPipe
 
 ## Installation
 
