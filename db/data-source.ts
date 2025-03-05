@@ -1,5 +1,4 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { User } from '../src/auth/entities/user.entity';
 import * as dotenv from 'dotenv';
 dotenv.config(); // i use this because the .env not loaded yet
 
@@ -10,7 +9,7 @@ export const dataSourceOptions: DataSourceOptions = {
   username: process.env.DB_USER_NAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DATA_BASE,
-  entities: [User],
+  entities: ['dist/**/*.entity.js'],
   migrations: ['dist/db/migrations/*.js'],
   synchronize: false,
   migrationsRun: true,
