@@ -15,21 +15,20 @@ import { AuthGuard } from './guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/role.guard';
 import { Role } from 'src/auth/decorator/role.decorator';
 import { loginDTO } from './dto/login.dto';
+import { ResponseService } from 'src/common/utility/response/response.service';
 
-@Controller('auth')
+@Controller({ path: 'auth', version: '1' })
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly responseService: ResponseService,
+  ) {}
 
-  @Post()
+  /*   @Post()
   async create(@Body() SignUpDto: SignUpDto) {
     return await this.authService.create(SignUpDto);
   }
-  @UseGuards(AuthGuard, RolesGuard)
-  @Role('user')
-  @Get()
-  async findAll() {
-    return await this.authService.findAll();
-  }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -44,15 +43,25 @@ export class AuthController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.authService.remove(+id);
+  } */
+
+  @UseGuards(AuthGuard, RolesGuard)
+  @Role('user')
+  @Get()
+  async findAll() {
+    const users = await this.authService.findAll();
+    return this.responseService.success(users);
   }
 
   @Post('login')
-  logIn(@Body() loginDTO: loginDTO) {
-    console.log(loginDTO);
-    return this.authService.logIn(loginDTO);
+  async logIn(@Body() loginDTO: loginDTO) {
+    const user = await this.authService.logIn(loginDTO);
+    return this.responseService.success(user);
   }
+
   @Post('signup')
-  signUp(@Body() SignUpDto: SignUpDto) {
-    return this.authService.signUp(SignUpDto);
+  async signUp(@Body() SignUpDto: SignUpDto) {
+    const user = await this.authService.signUp(SignUpDto);
+    return this.responseService.success(user);
   }
 }
