@@ -31,6 +31,8 @@ in this repo i do POS with nestJa and typeORM for postgres
 - authentication & authorization using guards
 - create custom decorator
 - using DTO and apply ValidationPipe
+- create custom response sender
+- file utile
 
 ## Installation
 
