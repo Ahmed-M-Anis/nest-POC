@@ -43,7 +43,6 @@ export class AuthService {
 
   async validateUserPassword(email: string, password: string): Promise<any> {
     // Retrieve the user by email
-    console.log('email', email);
     const user = await this.usersRepository.findOne({ where: { email } });
 
     // Check if user exists and the password is correct
@@ -79,12 +78,24 @@ export class AuthService {
       const isExist: boolean = await this.validateUserExist(signUpDto.email);
 
       if (isExist) {
-        throw new ConflictException('This email is already registered.');
+        throw new HttpException(
+          'This email is already registered.',
+          HttpStatus.FORBIDDEN,
+        );
       }
       const user = this.usersRepository.create(signUpDto);
-      return this.usersRepository.save(user);
+      console.log(user);
+      this.usersRepository.insert(user);
+      const payload = {
+        id: user.id,
+        firstName: user.firstName,
+        role: user.role,
+      };
+      return {
+        access_token: await this.jwtService.signAsync(payload),
+      };
     } catch (error) {
-      return error.message;
+      throw new HttpException(error.message, HttpStatus.FORBIDDEN);
     }
   }
 }
