@@ -5,7 +5,6 @@ import {
   BeforeInsert,
   BeforeUpdate,
 } from 'typeorm';
-import { IsEmail } from 'class-validator';
 
 import * as bcrypt from 'bcrypt';
 
