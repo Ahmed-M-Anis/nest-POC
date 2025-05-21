@@ -52,7 +52,19 @@ export class AuthService {
 
   async validateUserPassword(email: string, password: string): Promise<any> {
     // Retrieve the user by email
-    const user = await this.usersRepository.findOne({ where: { email } });
+    const user = await this.usersRepository.findOne({
+      where: { email },
+      select: [
+        'id',
+        'firstName',
+        'lastName',
+        'email',
+        'password',
+        'role',
+        'isActive',
+        'passwordChangedAt',
+      ],
+    });
 
     // Check if user exists and the password is correct
     if (user && (await user.checkPassword(password))) {
