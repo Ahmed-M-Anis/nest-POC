@@ -29,6 +29,15 @@ export class AuthService {
     return await this.usersRepository.find();
   }
 
+  async paginateUsers(page = 1, limit = 10) {
+    const data = await this.usersRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return data;
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} auth`;
   }

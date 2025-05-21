@@ -5,7 +5,6 @@ import { AuthService } from './auth.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { User } from './entities/user.entity';
-import { ResponseModule } from '../common/utility/response/response.module';
 
 @Module({
   imports: [
@@ -20,7 +19,6 @@ import { ResponseModule } from '../common/utility/response/response.module';
       }),
       inject: [ConfigService],
     }),
-    ResponseModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
