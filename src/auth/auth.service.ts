@@ -68,9 +68,7 @@ export class AuthService {
 
     // Check if user exists and the password is correct
     if (user && (await user.checkPassword(password))) {
-      // Extract user properties (without password) to return
-      const { password, ...result } = user;
-      return result;
+      return user;
     }
   }
 
@@ -105,8 +103,8 @@ export class AuthService {
         );
       }
       const user = this.usersRepository.create(signUpDto);
-      console.log(user);
-      this.usersRepository.insert(user);
+
+      await this.usersRepository.save(user);
       const payload = {
         id: user.id,
         firstName: user.firstName,
