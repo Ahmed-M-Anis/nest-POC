@@ -6,7 +6,7 @@ import {
   ValidationArguments,
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
 @ValidatorConstraint({ async: true })
@@ -15,14 +15,20 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
 
   async validate(value: any, args: ValidationArguments): Promise<boolean> {
     const [entity, field] = args.constraints;
-    const repository = this.dataSource.getRepository(entity);
-    const record = await repository.findOne({ where: { [field]: value } });
-    return !record; // Return true if no record is found (value is unique)
+
+    // getRepository works for any entity if it's registered in the DataSource
+    const repository: Repository<any> = this.dataSource.getRepository(entity);
+
+    const record = await repository.findOne({
+      where: { [field]: value },
+    });
+
+    return !record;
   }
 
   defaultMessage(args: ValidationArguments): string {
     const [entity, field] = args.constraints;
-    return `${field} is already taken`;
+    return `${field} must be unique`;
   }
 }
 
@@ -34,7 +40,7 @@ export function IsUnique(
   return function (object: Object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
-      propertyName: propertyName,
+      propertyName,
       options: validationOptions,
       constraints: [entity, field],
       validator: IsUniqueConstraint,
