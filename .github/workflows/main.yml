@@ -1,0 +1,40 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          TARGET: /var/www/scentag_backend
+          ARGS: -rlgoDzvc --delete --exclude=.git --exclude=node_modules
+
+      - name: Build, Migrate, and Restart
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /var/www/scentag_backend
+            # Load environment variables for the shell session
+            export $(grep -v '^#' .env | xargs)
+            npm install
+            npm run build
+            # Run migrations to update DB schema
+            npm run migration:run
+            # Manage PM2 process
+            pm2 delete scentag_backend || true
+            pm2 start dist/main.js --name scentag_backend
+            pm2 save
